@@ -6,11 +6,11 @@ levels or anything else you are having a hard time doing.
 The hotkey to open the menu is ALT.
 
 [h1] Features [/h1]
-[h2] Player [/h2]
+[h3] Player [/h3]
 [list]
 [*] GodMode
 [/list]
-[h2] Movement [/h2]
+[h3] Movement [/h3]
 [list]
 [*] Jesus
 [*] Jetpack
@@ -18,14 +18,14 @@ The hotkey to open the menu is ALT.
 [*] Fast Stop
 [*] Shift Teleport
 [/list]
-[h2] Visual [/h2]
+[h3] Visual [/h3]
 [list]
 [*] FOV
 [*] Invisible Tool
 [*] Tool Outline
 [*] ESP (wall hacks)
 [/list]
-[h2] Game [/h2]
+[h3] Game [/h3]
 [list]
 [*] Freeze Timer
 [*] Mission Stats
@@ -36,7 +36,7 @@ The hotkey to open the menu is ALT.
 [*] Inf Ammo
 [*] Inf Money
 [/list]
-[h2] Interface [/h2]
+[h3] Interface [/h3]
 [list]
 [*] Watermark
 [*] Feature List
