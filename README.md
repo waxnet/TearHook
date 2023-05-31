@@ -2,7 +2,7 @@
 
 <p align= "center">
   <kbd>
-    <img  src="https://raw.githubusercontent.com/waxnet/TearHook/main/preview.jpg">
+    <img  src="https://raw.githubusercontent.com/waxnet/TearHook/main/.github/workflows/icon.png">
   </kbd>
 </p>
 
