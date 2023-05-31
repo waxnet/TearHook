@@ -64,7 +64,7 @@
 -----
 
 ### <p align="center">🤔 Purpose 🤔</p>
-<p align="center"><i><b>TearHook is a project made for fun to replicate cheats present in popular games.</b></i></p>
+<p align="center"><i><b>TearHook is a Teardown mod made to replicate cheats present in popular modern games.</b></i></p>
 
 -----
 
