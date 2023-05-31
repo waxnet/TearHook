@@ -1,0 +1,51 @@
+[h1] TearHook is da wae. [/h1]
+
+TearHook is a useful utility mod which helps you complete
+levels or anything else you are having a hard time doing.
+
+The hotkey to open the menu is ALT.
+
+[h1] Features [/h1]
+[h2] Player [/h2]
+[list]
+[*] GodMode
+[/list]
+[h2] Movement [/h2]
+[list]
+[*] Jesus
+[*] Jetpack
+[*] Speed
+[*] Fast Stop
+[*] Shift Teleport
+[/list]
+[h2] Visual [/h2]
+[list]
+[*] FOV
+[*] Invisible Tool
+[*] Tool Outline
+[*] ESP (wall hacks)
+[/list]
+[h2] Game [/h2]
+[list]
+[*] Freeze Timer
+[*] Mission Stats
+[*] No Alarm
+[*] No Objectives
+[*] No Robots
+[*] Auto Escape
+[*] Inf Ammo
+[*] Inf Money
+[/list]
+[h2] Interface [/h2]
+[list]
+[*] Watermark
+[*] Feature List
+[*] Change Log
+[/list]
+
+[h1] GitHub [/h1]
+If you want to contribute or report any bug feel free to do
+so on the TearHook GitHub repository.
+[url=https://github.com/waxnet/TearHook]GitHub[/url]
+
+[h1] Have fun! [/h1]

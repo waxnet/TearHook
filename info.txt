@@ -1,0 +1,3 @@
+name = TearHook
+author = b8ff
+description = [noupload] TearHook is da wae. Press ALT to open the menu.
