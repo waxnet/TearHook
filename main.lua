@@ -1,7 +1,9 @@
 local storage = {}
-do
+do  
     storage.changelog = {
-        " - Changed some UI stuff",
+        " - Changed icon",
+        " - Updated Steam description",
+        " - Uploaded code on GitHub"
     }
 
     storage.modules = {
@@ -34,6 +36,7 @@ do
 		-- interface
 		"Watermark",
 		"Feature List",
+        "FPS",
 		"Change Log",
 	}
 end
@@ -150,7 +153,7 @@ do
             ["interface"] = nil,
         },
         ["options"] = nil,
-        ["config_window"] = nil,
+        ["config_window"] = nil
     }
     
     ui.setup = function()
@@ -754,6 +757,17 @@ do
                             }
                         })
 
+                        ui.utilities.new_toggle({
+                            ["name"] = "FPS",
+                            ["rgb"] = {r, g, b},
+                            ["options"] = {
+                                {
+                                    ["type"] = "bool",
+                                    ["name"] = "Rainbow",
+                                },
+                            }
+                        })
+
                         -- change log
                         ui.utilities.new_toggle({
                             ["name"] = "Change Log",
@@ -1265,6 +1279,7 @@ do
 	modules.interface = function()
 		local do_watermark_rainbow = GetBool("savegame.mod.tearhook.options.watermark.rainbow")
         local do_featurelist_rainbow = GetBool("savegame.mod.tearhook.options.featurelist.rainbow")
+        local do_fps_rainbow = GetBool("savegame.mod.tearhook.options.fps.rainbow")
 		local r, g, b = resolve.rgb()
 
 		if GetBool("savegame.mod.tearhook.modules.watermark") and not ui.data["enabled"] then
@@ -1304,6 +1319,26 @@ do
 				end
 			UiPop()
 		end
+
+        if GetBool("savegame.mod.tearhook.modules.fps") and not ui.data["enabled"] then
+			UiPush()
+				UiAlign("top left")
+                if GetBool("savegame.mod.tearhook.modules.changelog") then
+					UiTranslate(0, (16*#storage.changelog)+28)
+				end
+				UiTextOutline(0, 0, 0, 1, 0.2)
+				if do_fps_rainbow then
+				    UiColor(r, g, b)
+                else
+                    UiColor(1, 1, 1)
+                end
+				UiTranslate(0, 0)
+				UiFont("bold.ttf", 16)
+                local extra = ""
+                if GetInt("options.gfx.vsync") ~= 0 then extra = " (VSYNC)" end --remove this if you want, just thought this would be a small touch.
+                UiText(fps .. extra)
+			UiPop()
+		end
 		
 		if GetBool("savegame.mod.tearhook.modules.changelog") and not ui.data["enabled"] then
 			UiPush()
@@ -1334,6 +1369,15 @@ do
             modules.game()
         end
     end
+end
+
+fps = 0
+local lastFpsUpdate = 0
+function tick()
+    -- calculate fps every second
+    -- Include something like "FPS counter cannot go below 30fps due to Teardowns' limitations"
+    lastFpsUpdate = lastFpsUpdate + 1
+    if GetTime() % 1 > .95 and lastFpsUpdate > 8 then fps = math.floor(1/GetTimeStep()); lastFpsUpdate = 0 end
 end
 
 function update()
