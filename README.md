@@ -2,7 +2,7 @@
 
 <p align= "center">
   <kbd>
-    <img  src="https://raw.githubusercontent.com/waxnet/TearHook/main/.github/workflows/icon.png">
+    <img  src="https://raw.githubusercontent.com/waxnet/TearHook/main/preview.jpg">
   </kbd>
 </p>
 
@@ -54,6 +54,7 @@
         - Watermark
         - Feature List
         - Change Log
+        - No Hud
 
 -----
 

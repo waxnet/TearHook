@@ -1,7 +1,17 @@
 local storage = {}
 do
     storage.changelog = {
-        " - Changed some UI stuff",
+        " - Added minimizing for tabs",
+        " - Added dynamic tabs",
+        " - Added No Hud"
+    }
+
+    storage.modules_amount = {
+        ["player"] = 1,
+        ["movement"] = 5,
+        ["visual"] = 4,
+        ["game"] = 8,
+        ["interface"] = 4,
     }
 
     storage.modules = {
@@ -35,6 +45,7 @@ do
 		"Watermark",
 		"Feature List",
 		"Change Log",
+        "No Hud",
 	}
 end
 
@@ -108,6 +119,9 @@ do
         end
         
         -- set default keys
+        if not HasKey("savegame.mod.tearhook.options.slowmotion.timescale") then
+            SetFloat("savegame.mod.tearhook.options.slowmotion.timescale", .5)
+        end
         if not HasKey("savegame.mod.tearhook.options.jetpack.multiplier") then
             SetInt("savegame.mod.tearhook.options.jetpack.multiplier", 10)
         end
@@ -127,6 +141,7 @@ end
 local asset = {}
 do
     asset.booleans = {"assets/booleans/true.png", "assets/booleans/false.png"}
+    asset.arrows = {"assets/arrows/up.png", "assets/arrows/down.png"}
     asset.cog = "assets/cog.png"
 end
 
@@ -151,6 +166,13 @@ do
         },
         ["options"] = nil,
         ["config_window"] = nil,
+        ["minimized"] = {
+            ["player"] = false,
+            ["movement"] = false,
+            ["visual"] = false,
+            ["game"] = false,
+            ["interface"] = false,
+        },
     }
     
     ui.setup = function()
@@ -366,32 +388,6 @@ do
                 end
             UiPop()
         end
-
-        ui.utilities.new_button = function(data)
-            local first = data["first"] or false
-            local name = data["name"]
-            local callback = data["callback"]
-            local rgb = data["rgb"]
-
-            if first then
-                UiTranslate(0, 30)
-            else
-                UiTranslate(0, 35)
-            end
-
-            UiPush()
-                UiColor(1, 1, 1)
-                if UiTextButton(name) then
-                    UiPush()
-                        UiTranslate(0, -25)
-                        UiColor(rgb[1], rgb[2], rgb[3], 0.15)
-                        UiRect(ui.data["main_width"], 35)
-                    UiPop()
-
-                    callback()
-                end
-            UiPop()
-        end
     end
 
     ui.display = function()
@@ -422,23 +418,48 @@ do
                 UiPush()
                     UiTranslate(ui.data["sections"]["player"], ui.data["main_y"])
 
-                    UiTranslate(0, -1)
-                    UiRect(ui.data["main_width"] + 2, ui.data["main_height"] + 2)
+                    if not ui.data["minimized"]["player"] then
+                        local dynamic_height = 80 + (35 * (storage.modules_amount["player"] - 1))
 
-                    UiTranslate(0, 1)
-                    UiColor(0.1, 0.1, 0.1)
-                    UiRect(ui.data["main_width"], ui.data["main_height"])
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, dynamic_height + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], dynamic_height)
+                    else
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, 40 + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], 40)
+                    end
                     
                     UiColor(1, 1, 1)
                     UiTranslate(0, 30)
                     UiText("Player")
-
-                    UiColor(r, g, b)
-                    UiTranslate(0, 10)
-                    UiRect(ui.data["main_width"], 5)
+                    UiPush()
+                        UiAlign("center middle")
+                        UiTranslate(106, -9)
+                        if ui.data["minimized"]["player"] then
+                            if UiImageButton(asset.arrows[2]) then
+                                ui.data["minimized"]["player"] = not ui.data["minimized"]["player"]
+                            end
+                        else
+                            if UiImageButton(asset.arrows[1]) then
+                                ui.data["minimized"]["player"] = not ui.data["minimized"]["player"]
+                            end
+                        end
+                    UiPop()
 
                     -- player modules
-                    do
+                    local function modules()
+                        -- separation line
+                        UiColor(r, g, b)
+                        UiTranslate(0, 10)
+                        UiRect(ui.data["main_width"], 5)
+
                         -- setup
                         UiFont("bold.ttf", 25)
                         UiTextShadow(0, 0, 0, 0, 0)
@@ -450,29 +471,57 @@ do
                             ["rgb"] = {r, g, b},
                         })
                     end
+                    if not ui.data["minimized"]["player"] then
+                        modules()
+                    end
                 UiPop()
 
                 -- movement
                 UiPush()
                     UiTranslate(ui.data["sections"]["movement"], ui.data["main_y"])
                     
-                    UiTranslate(0, -1)
-                    UiRect(ui.data["main_width"] + 2, ui.data["main_height"] + 2)
+                    if not ui.data["minimized"]["movement"] then
+                        local dynamic_height = 80 + (35 * (storage.modules_amount["movement"] - 1))
 
-                    UiTranslate(0, 1)
-                    UiColor(0.1, 0.1, 0.1)
-                    UiRect(ui.data["main_width"], ui.data["main_height"])
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, dynamic_height + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], dynamic_height)
+                    else
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, 40 + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], 40)
+                    end
                     
                     UiColor(1, 1, 1)
                     UiTranslate(0, 30)
                     UiText("Movement")
-
-                    UiColor(r, g, b)
-                    UiTranslate(0, 10)
-                    UiRect(ui.data["main_width"], 5)
+                    UiPush()
+                        UiAlign("center middle")
+                        UiTranslate(106, -9)
+                        if ui.data["minimized"]["movement"] then
+                            if UiImageButton(asset.arrows[2]) then
+                                ui.data["minimized"]["movement"] = not ui.data["minimized"]["movement"]
+                            end
+                        else
+                            if UiImageButton(asset.arrows[1]) then
+                                ui.data["minimized"]["movement"] = not ui.data["minimized"]["movement"]
+                            end
+                        end
+                    UiPop()
 
                     -- movement modules
-                    do
+                    local function modules()
+                        -- separation line
+                        UiColor(r, g, b)
+                        UiTranslate(0, 10)
+                        UiRect(ui.data["main_width"], 5)
+
                         -- setup
                         UiFont("bold.ttf", 25)
                         UiTextShadow(0, 0, 0, 0, 0)
@@ -524,29 +573,57 @@ do
                             ["rgb"] = {r, g, b},
                         })
                     end
+                    if not ui.data["minimized"]["movement"] then
+                        modules()
+                    end
                 UiPop()
 
                 -- visual
                 UiPush()
                     UiTranslate(ui.data["sections"]["visual"], ui.data["main_y"])
                     
-                    UiTranslate(0, -1)
-                    UiRect(ui.data["main_width"] + 2, ui.data["main_height"] + 2)
+                    if not ui.data["minimized"]["visual"] then
+                        local dynamic_height = 80 + (35 * (storage.modules_amount["visual"] - 1))
 
-                    UiTranslate(0, 1)
-                    UiColor(0.1, 0.1, 0.1)
-                    UiRect(ui.data["main_width"], ui.data["main_height"])
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, dynamic_height + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], dynamic_height)
+                    else
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, 40 + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], 40)
+                    end
                     
                     UiColor(1, 1, 1)
                     UiTranslate(0, 30)
                     UiText("Visual")
-
-                    UiColor(r, g, b)
-                    UiTranslate(0, 10)
-                    UiRect(ui.data["main_width"], 5)
+                    UiPush()
+                        UiAlign("center middle")
+                        UiTranslate(106, -9)
+                        if ui.data["minimized"]["visual"] then
+                            if UiImageButton(asset.arrows[2]) then
+                                ui.data["minimized"]["visual"] = not ui.data["minimized"]["visual"]
+                            end
+                        else
+                            if UiImageButton(asset.arrows[1]) then
+                                ui.data["minimized"]["visual"] = not ui.data["minimized"]["visual"]
+                            end
+                        end
+                    UiPop()
 
                     -- visual modules
-                    do
+                    local function modules()
+                        -- separation line
+                        UiColor(r, g, b)
+                        UiTranslate(0, 10)
+                        UiRect(ui.data["main_width"], 5)
+
                         -- setup
                         UiFont("bold.ttf", 25)
                         UiTextShadow(0, 0, 0, 0, 0)
@@ -620,29 +697,57 @@ do
                             }
                         })
                     end
+                    if not ui.data["minimized"]["visual"] then
+                        modules()
+                    end
                 UiPop()
 
                 -- game
                 UiPush()
                     UiTranslate(ui.data["sections"]["game"], ui.data["main_y"])
                     
-                    UiTranslate(0, -1)
-                    UiRect(ui.data["main_width"] + 2, ui.data["main_height"] + 2)
+                    if not ui.data["minimized"]["game"] then
+                        local dynamic_height = 80 + (35 * (storage.modules_amount["game"] - 1))
 
-                    UiTranslate(0, 1)
-                    UiColor(0.1, 0.1, 0.1)
-                    UiRect(ui.data["main_width"], ui.data["main_height"])
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, dynamic_height + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], dynamic_height)
+                    else
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, 40 + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], 40)
+                    end
                     
                     UiColor(1, 1, 1)
                     UiTranslate(0, 30)
                     UiText("Game")
-
-                    UiColor(r, g, b)
-                    UiTranslate(0, 10)
-                    UiRect(ui.data["main_width"], 5)
+                    UiPush()
+                        UiAlign("center middle")
+                        UiTranslate(106, -9)
+                        if ui.data["minimized"]["game"] then
+                            if UiImageButton(asset.arrows[2]) then
+                                ui.data["minimized"]["game"] = not ui.data["minimized"]["game"]
+                            end
+                        else
+                            if UiImageButton(asset.arrows[1]) then
+                                ui.data["minimized"]["game"] = not ui.data["minimized"]["game"]
+                            end
+                        end
+                    UiPop()
 
                     -- game modules
-                    do
+                    local function modules()
+                        -- separation line
+                        UiColor(r, g, b)
+                        UiTranslate(0, 10)
+                        UiRect(ui.data["main_width"], 5)
+
                         -- setup
                         UiFont("bold.ttf", 25)
                         UiTextShadow(0, 0, 0, 0, 0)
@@ -702,29 +807,57 @@ do
                             }
                         })
                     end
+                    if not ui.data["minimized"]["game"] then
+                        modules()
+                    end
                 UiPop()
                 
                 -- interface
                 UiPush()
                     UiTranslate(ui.data["sections"]["interface"], ui.data["main_y"])
                     
-                    UiTranslate(0, -1)
-                    UiRect(ui.data["main_width"] + 2, ui.data["main_height"] + 2)
+                    if not ui.data["minimized"]["interface"] then
+                        local dynamic_height = 80 + (35 * (storage.modules_amount["interface"] - 1))
 
-                    UiTranslate(0, 1)
-                    UiColor(0.1, 0.1, 0.1)
-                    UiRect(ui.data["main_width"], ui.data["main_height"])
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, dynamic_height + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], dynamic_height)
+                    else
+                        UiTranslate(0, -1)
+                        UiRect(ui.data["main_width"] + 2, 40 + 2)
+
+                        UiTranslate(0, 1)
+                        UiColor(0.1, 0.1, 0.1)
+                        UiRect(ui.data["main_width"], 40)
+                    end
                     
                     UiColor(1, 1, 1)
                     UiTranslate(0, 30)
                     UiText("Interface")
-
-                    UiColor(r, g, b)
-                    UiTranslate(0, 10)
-                    UiRect(ui.data["main_width"], 5)
+                    UiPush()
+                        UiAlign("center middle")
+                        UiTranslate(106, -9)
+                        if ui.data["minimized"]["interface"] then
+                            if UiImageButton(asset.arrows[2]) then
+                                ui.data["minimized"]["interface"] = not ui.data["minimized"]["interface"]
+                            end
+                        else
+                            if UiImageButton(asset.arrows[1]) then
+                                ui.data["minimized"]["interface"] = not ui.data["minimized"]["interface"]
+                            end
+                        end
+                    UiPop()
 
                     -- interface modules
-                    do
+                    local function modules()
+                        -- separation line
+                        UiColor(r, g, b)
+                        UiTranslate(0, 10)
+                        UiRect(ui.data["main_width"], 5)
+
                         -- setup
                         UiFont("bold.ttf", 25)
                         UiTextShadow(0, 0, 0, 0, 0)
@@ -759,6 +892,15 @@ do
                             ["name"] = "Change Log",
                             ["rgb"] = {r, g, b},
                         })
+
+                        -- no hud
+                        ui.utilities.new_toggle({
+                            ["name"] = "No Hud",
+                            ["rgb"] = {r, g, b},
+                        })
+                    end
+                    if not ui.data["minimized"]["interface"] then
+                        modules()
                     end
                 UiPop()
             UiPop()
@@ -1319,6 +1461,10 @@ do
 					UiText(line, true)
 				end
 			UiPop()
+		end
+
+        if GetBool("savegame.mod.tearhook.modules.nohud") then
+			SetBool("hud.disable", true)
 		end
 	end
 

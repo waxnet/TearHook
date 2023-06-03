@@ -41,6 +41,7 @@ The hotkey to open the menu is ALT.
 [*] Watermark
 [*] Feature List
 [*] Change Log
+[*] No Hud
 [/list]
 
 [h1] GitHub [/h1]
