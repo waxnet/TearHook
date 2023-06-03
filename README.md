@@ -8,7 +8,7 @@
 
 -----
 
-### <p align="center">🔨 TearHook 🔨</p>
+### <p align="center">🦅 TearHook 🦅</p>
 <p align= "center">
   <img src="https://img.shields.io/github/languages/top/waxnet/TearHook">
   <img src="https://img.shields.io/github/stars/waxnet/TearHook">
