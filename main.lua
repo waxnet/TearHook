@@ -1,9 +1,7 @@
 local storage = {}
 do
     storage.changelog = {
-        " - Added minimizing for tabs",
-        " - Added dynamic tabs",
-        " - Added No Hud"
+        " - Fixed bug with options menu",
     }
 
     storage.modules_amount = {
@@ -269,7 +267,7 @@ do
         local first = true
         for _, batch in pairs(ui.data["config_window"]) do
             if batch["type"] == "bool" then
-                local option_path = "savegame.mod.tearhook.options." .. ui.data["config_window"]["name"]:lower() .. "." .. batch["name"]:lower():gsub("%s+", "")
+                local option_path = "savegame.mod.tearhook.options." .. ui.data["config_window"]["name"]:lower():gsub("%s+", "") .. "." .. batch["name"]:lower():gsub("%s+", "")
                 local current_value = GetBool(option_path)
 
                 if first and false then
@@ -299,7 +297,7 @@ do
                     end
                 UiPop()
             elseif batch["type"] == "int" then
-                local option_path = "savegame.mod.tearhook.options." .. ui.data["config_window"]["name"]:lower() .. "." .. batch["name"]:lower():gsub("%s+", "")
+                local option_path = "savegame.mod.tearhook.options." .. ui.data["config_window"]["name"]:lower():gsub("%s+", "") .. "." .. batch["name"]:lower():gsub("%s+", "")
                 local current_value = GetInt(option_path)
 
                 if first and false then
